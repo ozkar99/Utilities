@@ -1,0 +1,31 @@
+#!/usr/bin/ruby
+# Search for binding.pry / debuggers and run ruby -c and all files.
+ 
+flag = false
+bad_files = []
+ 
+Dir["{app,config,lib,spec}/**/*/*.rb"].each do |file|
+
+  debuggers = `grep -E 'debugger|binding.pry|byebug' #{file}`
+  bad_files << file if debuggers != ''
+
+  result = `ruby -c #{file}`
+  if $? != 0
+    puts result
+    flag = true
+  end
+
+  # bad_files with debuggers or bindings?
+  if bad_files.count > 0
+   flag = true
+  end
+
+end
+
+if flag
+ puts "Bad files with hanging debuggers/bindings/byebugs:" 
+ puts bad_files
+ exit 1
+end 
+
+exit 0
