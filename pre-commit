@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # Search for binding.pry / debuggers and run ruby -c and all files.
  
 flag = false
